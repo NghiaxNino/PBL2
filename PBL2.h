@@ -1,6 +1,6 @@
-#include <iostream>
+#ifndef PBL2_H
+#define PBL2_H
 #include <string>
-
 using namespace std;
 
 class Airline{
@@ -211,3 +211,4 @@ class AirlineManagementSystem{
         void searchAirline(string airlineID);
         
 };
+#endif

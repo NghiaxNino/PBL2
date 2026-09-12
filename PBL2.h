@@ -1,92 +1,75 @@
 #ifndef PBL2_H
 #define PBL2_H
+
+#include <iostream>
 #include <string>
+
 using namespace std;
 
-class Airline{
-    private:
-        string airlineID;
-        string airlineName;
-        string country;
-        string contactInfo;
-
+class Person{
+    protected:
+        string ID;
+        string fullName;
     public:
+        Person();
+        virtual void input() = 0;
+        virtual void output() = 0;
+        string getID();
+        string getFullName();
+        virtual ~Person();
+};
+
+class Passenger : public Person{
+    private:
+        string gender;
+        string citizenID;
+        string phoneNumber;
+        string email;
+    public:
+        Passenger();
         void input();
         void output();
-        string getAirlineID();
-        string getAirlineName();
         void updateInfo();
-        void updateStatus(string status);
+        string getPassengerID();
+};
+
+class Employee : public Person{
+    private:
+        string role;
+        string username;
+        string password;
+    public:
+        Employee();
+        void input();
+        void output();
+        void updateInfo();
+        bool login(string username, string password);
+        string getRole();
+        string getEmployeeID();
 };
 
 class Flight{
     private:
         string flightID;
-        string airlineID;
         string departure;
         string destination;
         string departureTime;
         string arrivalTime;
         string status;
+        int totalSeats;
+        int bookedSeats;
 
     public:
+        Flight();
         void input();
         void output();
         string getFlightID();
         void updateInfo();
+        void updateStatus(string status);
+        bool isFull();
+        void increaseBookedSeats();
+        void decreaseBookedSeats();
 };
-
-class Airplane{
-    private:
-        string airplaneID;
-        string airplaneType;
-        int seatCount;
-        string status;
-
-    public:
-        void input();
-        void output();
-        string getAirplaneID();
-        void updateInfo();
-};
-
-class Seat{
-    private:
-        string seatID;
-        string seatClass;
-        string status;
-
-    public:
-        void input();
-        void output();
-        string getSeatID();
-        void bookSeat();
-        void cancelSeat();
-};
-
-class Passenger{
-    private:
-        string passengerID;
-        string fullName;
-        string birthDate;
-        string citizenID;
-        string phoneNumber;
-        string email;
-        string username;
-        string password;
-
-    public:
-        void input();
-        void output();
-        string getPassengerID();
-        void updateInfo();
-        bool login(string username, string password);
-        void viewFlight();
-        void viewTicket();
-        void printTicket();
-
-};
-
 class Ticket{
     private:
         string ticketID;
@@ -98,117 +81,69 @@ class Ticket{
         string status;
 
     public:
+        Ticket();
         void input();
         void output();
         string getTicketID();
+        string getPassengerID();
+        string getFlightID();
         void bookTicket();
         void cancelTicket();
         void printTicket();
 };
 
-class Payment{
+
+class AirlineBookingSystem{
     private:
-        string transactionID;
-        string paymentMethod;
-        double ticketPrice;
-        string paymentTime;
-        string status;
-
-    public:
-        void input();
-        void output();
-        void updateStatus(string status);
-
-};
-
-class Employee{
-    protected:
-        string employeeID;
-        string fullName;
-        string position;
-        string username;
-        string password;
-
-    public:
-        void input();
-        void output();
-        string getEmployeeID();
-        bool login(string username, string password);
-};
-
-class Admin : public Employee {
-    public:
-        void addEmployee();
-        void deleteEmployee();
-        void assignRole();
-};
-
-class TicketStaff : public Employee {
-    public:
-        void searchFlight(string flightID);
-        void createTicket();
-        void cancelTicket();
-};
-
-class FlightManager : public Employee{
-    public:
-        void updateFlight();
-        void updateFlightStatus();
-};
-
-class Accountant : public Employee{
-    public:
-        void refundPayment();
-        void revenue();
-};
-
-class AirlineManagementSystem{
-    private:
-        Flight* flights;
-        Passenger* passengers;
-        Ticket* tickets;
-        Employee* employees;
-        Airline* airlines;
+        Flight* flight;
+        Passenger* passenger;
+        Employee* employee;
+        Ticket* ticket;
 
         int flightCount;
         int passengerCount;
-        int ticketCount;
         int employeeCount;
-        int airlineCount;
+        int ticketCount;
 
     public:
-        AirlineManagementSystem();
-        ~AirlineManagementSystem();
+        AirlineBookingSystem();
+        ~AirlineBookingSystem();
 
-        // Flight
+        void menu();
+        void flightMenu();
+        void passengerMenu();
+        void employeeMenu();
+        void ticketMenu();
+        
         void addFlight();
         void deleteFlight();
         void updateFlight();
-        void searchFlight(string flightID);
+        int searchFlight(string flightID);
         void displayFlights();
 
-        // Passenger
         void addPassenger();
         void deletePassenger();
         void updatePassenger();
-        void searchPassenger(string passengerID);
+        int searchPassenger(string passengerID);
         void displayPassengers();
 
-        // Ticket
-        void createTicket();
-        void cancelTicket();
-        void searchTicket(string ticketID);
-        void displayTickets();
-
-        // Employee
         void addEmployee();
         void deleteEmployee();
-        void searchEmployee(string employeeID);
+        void updateEmployee();
+        int searchEmployee(string employeeID);
+        void displayEmployees();
 
-        // Airline
-        void addAirline();
-        void deleteAirline();
-        void searchAirline(string airlineID);
-        
+        void createTicket();
+        void cancelTicket();
+        int searchTicket(string ticketID);
+        void displayTickets();
+
+        void sortPassengerByID();
+        void sortEmployeeByID();
+        void sortTicketByID();
+        void sortFlightByID();
+
+        void sortFlightByTime();
+        void sortPassengerByName();
 };
 #endif

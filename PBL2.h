@@ -139,9 +139,10 @@ class AirlineBookingSystem{
         void displayTickets();
 
         void sortPassengerByID();
-        void sortEmployeeByID();
         void sortTicketByID();
         void sortFlightByID();
+
+        void sortEmployeeByRole();
 
         void sortFlightByTime();
         void sortPassengerByName();

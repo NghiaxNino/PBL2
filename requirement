@@ -1,4 +1,5 @@
 Quản lý vé máy bay:
+
 1. Quản lý chuyến bay
 Mã chuyến bay (VN123, VJ456,...)
 Hãng hàng không
@@ -6,15 +7,18 @@ Hãng hàng không
 Ngày giờ khởi hành
 Ngày giờ hạ cánh
 Trạng thái chuyến bay (đúng giờ, hoãn, hủy)
+
 2. Quản lý máy bay
 Mã máy bay
 Loại máy bay (Airbus A320, Boeing 787,...)
 Số ghế
 Tình trạng hoạt động
+
 3. Quản lý ghế ngồi
 Mã ghế (A1, B2,...)
 Hạng ghế (Phổ thông, Thương gia, Hạng nhất)
 Trạng thái ghế (trống, đã đặt)
+
 4. Quản lý hành khách
 Mã hành khách
 Họ tên
@@ -22,6 +26,7 @@ Ngày sinh
 CCCD/Hộ chiếu
 Số điện thoại
 Email
+
 5. Quản lý vé máy bay
 Mã vé
 Hành khách sở hữu
@@ -30,23 +35,27 @@ Ghế đã chọn
 Giá vé
 Ngày đặt vé
 Trạng thái vé (đã thanh toán, chưa thanh toán, đã hủy)
+
 6. Quản lý đặt chỗ
 Mã đặt chỗ
 Ngày đặt
 Danh sách hành khách
 Tổng tiền
 Trạng thái đặt chỗ
+
 7. Quản lý thanh toán
 Mã giao dịch
 Hình thức thanh toán
 Số tiền
 Thời gian thanh toán
 Trạng thái giao dịch
+
 8. Quản lý nhân viên (nếu là hệ thống của hãng hoặc đại lý)
 Mã nhân viên
 Họ tên
 Chức vụ
 Tài khoản đăng nhập
+
 9. Quản lý hãng hàng không
 Mã hãng
 Tên hãng
@@ -64,11 +73,6 @@ Nhân viên bán vé
 + Đặt vé cho khách.
 + Hủy hoặc đổi vé theo yêu cầu.
 
-Nhân viên chăm sóc khách hàng
-+ Hỗ trợ khách hàng.
-+ Giải đáp thắc mắc về chuyến bay và vé.
-+ Xử lý khiếu nại.
-
 Nhân viên quản lý chuyến bay
 + Cập nhật thông tin chuyến bay.
 + Thay đổi giờ bay, trạng thái bay.
@@ -80,3 +84,6 @@ Nhân viên kế toán
 + Thống kê doanh thu.
 
 customer: xem toàn bộ thông tin suất bay bản thân + in vé.
+
+Hàm: Thêm, xoá, tìm kiếm, kiểm tra đầy, sắp xếp(thời gian, mã, tên khách A->Z)
+Hỏi:

@@ -1,9 +1,11 @@
 #ifndef PBL2_H
 #define PBL2_H
+
 #include <iostream>
 #include <string>
 
 using namespace std;
+
 class Person{
     protected:
         string ID;

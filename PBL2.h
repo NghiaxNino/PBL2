@@ -140,6 +140,9 @@ class AirlineBookingSystem{
 
         void sortPassengerByID();
         void sortTicketByID();
+
+        void mergeFlight(int left, int mid, int right);
+        void mergeSortFlight(int left, int right);
         void sortFlightByID();
 
         void sortEmployeeByRole();

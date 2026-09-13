@@ -19,16 +19,40 @@ AirlineBookingSystem::~AirlineBookingSystem(){
     delete[] ticket;
 }
 
-void AirlineBookingSystem::sortFlightByID(){
-    for(int i = 0; i < flightCount - 1; i++){
-        for(int j = i + 1; j < flightCount; j++){
-            if(flight[i].getFlightID() > flight[j].getFlightID()){
-                Flight temp = flight[i];
-                flight[i] = flight[j];
-                flight[j] = temp;
-            }
-        }
+// void AirlineBookingSystem::sortFlightByID(){
+//     for(int i = 0; i < flightCount - 1; i++){
+//         for(int j = i + 1; j < flightCount; j++){
+//             if(flight[i].getFlightID() > flight[j].getFlightID()){
+//                 Flight temp = flight[i];
+//                 flight[i] = flight[j];
+//                 flight[j] = temp;
+//             }
+//         }
+//     }
+// }
+
+void AirlineBookingSystem::mergeFlight(int left, int mid, int right){
+    Flight* temp = new Flight[flightCount];
+    int i = left;
+    int j = mid + 1;
+    int k = left;
+
+    while(i <= mid && j <= right){
+        if(flight[i].getFlightID() <= flight[j].getFlightID()) temp[k++] = flight[i++];
+        else temp[k++] = flight[j++];
     }
+    while(i <= mid) temp[k++] = flight[i++];
+    while(j <= right) temp[k++] = flight[j++];
+    for(i = left; i <= right; i++) flight[i] = temp[i];
+    delete[] temp;
+}
+
+void AirlineBookingSystem::mergeSortFlight(int left, int right){
+    if(left >= right) return;
+    int mid = (left + right) / 2;
+    mergeSortFlight(left, mid);
+    mergeSortFlight(mid + 1, right);
+    mergeFlight(left, mid, right);
 }
 
 void AirlineBookingSystem::addFlight(){
@@ -41,7 +65,7 @@ void AirlineBookingSystem::addFlight(){
     delete[] flight;
     flight = temp;
     flightCount++;
-    sortFlightByID();
+    mergeSortFlight(0, flightCount - 1);
     cout << "Them thanh cong\n";
 }
 
@@ -94,12 +118,12 @@ void AirlineBookingSystem::updateFlight(){
     cin >> flightID;
     int pos = searchFlight(flightID);
     if(pos == -1){
-        cout << "Khong tim thay!\n";
+        cout << "Khong tim thay\n";
         return;
     }
     cin.ignore();
     flight[pos].updateInfo();
-    cout << "Cap nhat thanh cong!\n";
+    cout << "Cap nhat thanh cong\n";
 }
 
 void AirlineBookingSystem::sortPassengerByID(){
@@ -113,6 +137,7 @@ void AirlineBookingSystem::sortPassengerByID(){
         }
     }
 }
+
 void AirlineBookingSystem::addPassenger(){
     Passenger* temp = new Passenger[passengerCount + 1];
     for(int i = 0; i < passengerCount; i++) temp[i] = passenger[i];
@@ -123,7 +148,7 @@ void AirlineBookingSystem::addPassenger(){
     passenger = temp;
     passengerCount++;
     sortPassengerByID();
-    cout << "Them hanh khach thanh cong!\n";
+    cout << "Them hanh khach thanh cong\n";
 }
 
 int AirlineBookingSystem::searchPassenger(string passengerID){
@@ -140,7 +165,7 @@ int AirlineBookingSystem::searchPassenger(string passengerID){
 
 void AirlineBookingSystem::displayPassengers(){
     if(passengerCount == 0){
-        cout << "Danh sach rong!\n";
+        cout << "Danh sach rong\n";
         return;
     }
     for(int i = 0; i < passengerCount; i++){
@@ -175,7 +200,7 @@ void AirlineBookingSystem::updatePassenger(){
     cin >> passengerID;
     int pos = searchPassenger(passengerID);
     if(pos == -1){
-        cout << "Khong tim thay!\n";
+        cout << "Khong tim thay\n";
         return;
     }
     cin.ignore();
@@ -204,7 +229,7 @@ void AirlineBookingSystem::addEmployee(){
     employee = temp;
     employeeCount++;
     sortEmployeeByRole();
-    cout << "Them nhan vien thanh cong!\n";
+    cout << "Them nhan vien thanh cong\n";
 }
 
 void AirlineBookingSystem::deleteEmployee(){
@@ -224,7 +249,7 @@ void AirlineBookingSystem::deleteEmployee(){
     delete[] employee;
     employee = temp;
     employeeCount--;
-    cout << "Xoa thanh cong!\n";
+    cout << "Xoa thanh cong\n";
 }
 
 void AirlineBookingSystem::displayEmployees(){
@@ -244,7 +269,7 @@ void AirlineBookingSystem::updateEmployee(){
     cin >> employeeID;
     int pos = searchEmployee(employeeID);
     if(pos == -1){
-        cout << "Khong tim thay!\n";
+        cout << "Khong tim thay\n";
         return;
     }
     cin.ignore();
@@ -294,7 +319,7 @@ void AirlineBookingSystem::cancelTicket(){
     cin >> ticketID;
     int pos = searchTicket(ticketID);
     if(pos == -1){
-        cout << "Khong tim thay ve!\n";
+        cout << "Khong tim thay ve\n";
         return;
     }
     ticket[pos].cancelTicket();
@@ -377,7 +402,7 @@ void AirlineBookingSystem::flightMenu(){
                 cout << "Nhap ma chuyen bay: ";
                 cin >> id;
                 int pos = searchFlight(id);
-                if(pos == -1) cout << "Khong tim thay!\n";
+                if(pos == -1) cout << "Khong tim thay\n";
                 else flight[pos].output();
                 break;
             }
@@ -416,7 +441,7 @@ void AirlineBookingSystem::passengerMenu(){
                 cout << "Nhap ma hanh khach: ";
                 cin >> id;
                 int pos = searchPassenger(id);
-                if(pos == -1) cout << "Khong tim thay!\n";
+                if(pos == -1) cout << "Khong tim thay\n";
                 else passenger[pos].output();
                 break;
             }
@@ -480,7 +505,7 @@ void AirlineBookingSystem::ticketMenu(){
                 cout << "Nhap ma ve: ";
                 cin >> id;
                 int pos = searchTicket(id);
-                if(pos == -1) cout << "Khong tim thay!\n";
+                if(pos == -1) cout << "Khong tim thay\n";
                 else ticket[pos].output();
                 break;
             }

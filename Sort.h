@@ -35,17 +35,3 @@ void mergeSort(T arr[], int left, int right, bool (*compare)(const T&, const T&)
 
 #endif
 
-// #include "Sort.h"
-
-// bool compareFlight(const Flight& a, const Flight& b){
-//     return a.getFlightID() <= b.getFlightID();
-// }
-// bool comparePassenger(const Passenger& a, const Passenger& b){
-//     return a.getPassengerID() <= b.getPassengerID();
-// }
-// bool compareEmployee(const Employee& a, const Employee& b){
-//     return a.getRole() <= b.getRole();
-// }
-// bool compareTicket(const Ticket& a, const Ticket& b){
-//     return a.getTicketID() <= b.getTicketID();
-// }

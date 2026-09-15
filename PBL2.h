@@ -30,7 +30,7 @@ class Passenger : public Person{
         void input();
         void output();
         void updateInfo();
-        string getPassengerID();
+        string getPassengerID() const;
 };
 
 class Employee : public Person{
@@ -44,8 +44,8 @@ class Employee : public Person{
         void output();
         void updateInfo();
         bool login(string username, string password);
-        string getRole();
-        string getEmployeeID();
+        string getRole() const;
+        string getEmployeeID() const;
 };
 
 class Flight{
@@ -63,7 +63,7 @@ class Flight{
         Flight();
         void input();
         void output();
-        string getFlightID();
+        string getFlightID() const;
         void updateInfo();
         void updateStatus(string status);
         bool isFull();
@@ -84,9 +84,9 @@ class Ticket{
         Ticket();
         void input();
         void output();
-        string getTicketID();
-        string getPassengerID();
-        string getFlightID();
+        string getTicketID() const;
+        string getPassengerID() const;
+        string getFlightID() const;
         void bookTicket();
         void cancelTicket();
         void printTicket();
@@ -115,36 +115,37 @@ class AirlineBookingSystem{
         void employeeMenu();
         void ticketMenu();
         
-        void addFlight(bool (*cmp)(string, string));
-        void deleteFlight(bool (*cmp)(string, string));
-        void updateFlight(bool (*cmp)(string, string));
-        int searchFlight(string flightID, bool (*cmp)(string, string));
+        void addFlight();
+        void deleteFlight();
+        void updateFlight();
+        int searchFlight(string flightID);
         void displayFlights();
 
-        void addPassenger(bool (*cmp)(string, string));
-        void deletePassenger(bool (*cmp)(string, string));
-        void updatePassenger(bool (*cmp)(string, string));
-        int searchPassenger(string passengerID, bool (*cmp)(string, string));
+        void addPassenger();
+        void deletePassenger();
+        void updatePassenger();
+        int searchPassenger(string passengerID);
         void displayPassengers();
 
-        void addEmployee(bool (*cmp)(string, string));
-        void deleteEmployee(bool (*cmp)(string, string));
-        void updateEmployee(bool (*cmp)(string, string));
-        int searchEmployee(string employeeID, bool (*cmp)(string, string));
+        void addEmployee();
+        void deleteEmployee();
+        void updateEmployee();
+        int searchEmployee(string employeeID);
         void displayEmployees();
 
-        void createTicket(bool (*cmp)(string, string));
-        void cancelTicket(bool (*cmp)(string, string));
-        int searchTicket(string ticketID, bool (*cmp)(string, string));
+        void createTicket();
+        void cancelTicket();
+        int searchTicket(string ticketID);
         void displayTickets();
 
-        void sortPassengerByID(int left, int right, bool (*cmp)(string, string));
-        void sortTicketByID(int left, int right, bool (*cmp)(string, string));
-        void sortFlightByID(int left, int right, bool (*cmp)(string, string));
+        // void sortPassengerByID(int left, int right);
+        // void sortTicketByID(int left, int right, );
+        // void sortFlightByID(int left, int right, );
 
-        void sortEmployeeByRole(int left, int right, bool (*cmp)(string, string));
-
+        // void sortEmployeeByRole(int left, int right, );
         void sortFlightByTime();
         void sortPassengerByName();
+        
+
 };
 #endif

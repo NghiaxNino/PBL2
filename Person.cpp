@@ -17,6 +17,8 @@ Person::~Person(){
 }
 
 Passenger::Passenger(){
+    username = "";
+    password = "";
     citizenID = "";
     phoneNumber = "";
     email = "";
@@ -48,6 +50,10 @@ void Passenger::output(){
 }
 
 void Passenger::updateInfo(){
+    cout << "Nhap username: ";
+    getline(cin, username);
+    cout << "Nhap password: ";
+    getline(cin, password);
     cout << "Nhap ho ten moi: ";
     getline(cin, fullName);
     cout << "Nhap gioi tinh moi: ";
@@ -57,8 +63,10 @@ void Passenger::updateInfo(){
     cout << "Nhap email moi: ";
     getline(cin, email);
 }
-
-string Passenger::getPassengerID(){
+bool Passenger::login(string username, string password){
+    return this->username == username && this->password == password;
+}
+string Passenger::getPassengerID() const{
     return ID;
 }
 
@@ -69,16 +77,16 @@ string Passenger::getPassengerID(){
 }
 
 void Employee::input(){
+    cout << "Nhap username: ";
+    getline(cin, username);
+    cout << "Nhap password: ";
+    getline(cin, password);
     cout << "Nhap ma nhan vien: ";
     getline(cin, ID);
     cout << "Nhap ho ten: ";
     getline(cin, fullName);
     cout << "Nhap chuc vu: ";
     getline(cin, role);
-    cout << "Nhap username: ";
-    getline(cin, username);
-    cout << "Nhap password: ";
-    getline(cin, password);
 }
 
 void Employee::output(){
@@ -100,10 +108,10 @@ bool Employee::login(string username, string password){
     return this->username == username && this->password == password;
 }
 
-string Employee::getRole(){
+string Employee::getRole() const{
     return role;
 }
 
-string Employee::getEmployeeID(){
+string Employee::getEmployeeID() const{
     return ID;
 }

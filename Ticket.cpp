@@ -38,15 +38,15 @@ void Ticket::output(){
     cout << "Trang thai: " << status << endl;
 }
 
-string Ticket::getTicketID(){
+string Ticket::getTicketID() const{
     return ticketID;
 }
 
-string Ticket::getPassengerID(){
+string Ticket::getPassengerID() const{
     return passengerID;
 }
 
-string Ticket::getFlightID(){
+string Ticket::getFlightID() const{
     return flightID;
 }
 

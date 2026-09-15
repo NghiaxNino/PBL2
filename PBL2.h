@@ -21,6 +21,8 @@ class Person{
 
 class Passenger : public Person{
     private:
+        string username;
+        string password;
         string gender;
         string citizenID;
         string phoneNumber;
@@ -30,6 +32,7 @@ class Passenger : public Person{
         void input();
         void output();
         void updateInfo();
+        bool login(string username, string password);
         string getPassengerID() const;
 };
 

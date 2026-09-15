@@ -40,7 +40,7 @@ void Flight::output(){
     cout << "So ghe: " << bookedSeats << "/" << totalSeats << endl;
 }
 
-string Flight::getFlightID(){
+string Flight::getFlightID() const{
     return flightID;
 }
 

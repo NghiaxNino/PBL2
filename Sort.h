@@ -25,20 +25,27 @@ void merge(T arr[],int left, int mid, int right, bool (*compare)(const T&, const
 }
 
 template <class T>
-void mergeSort(T arr[],
-               int left,
-               int right,
-               bool (*compare)(const T&, const T&))
-{
-    if(left >= right)
-        return;
-
+void mergeSort(T arr[], int left, int right, bool (*compare)(const T&, const T&)){
+    if(left >= right) return;
     int mid = (left + right) / 2;
-
     mergeSort(arr, left, mid, compare);
     mergeSort(arr, mid + 1, right, compare);
-
     merge(arr, left, mid, right, compare);
 }
 
 #endif
+
+// #include "Sort.h"
+
+// bool compareFlight(const Flight& a, const Flight& b){
+//     return a.getFlightID() <= b.getFlightID();
+// }
+// bool comparePassenger(const Passenger& a, const Passenger& b){
+//     return a.getPassengerID() <= b.getPassengerID();
+// }
+// bool compareEmployee(const Employee& a, const Employee& b){
+//     return a.getRole() <= b.getRole();
+// }
+// bool compareTicket(const Ticket& a, const Ticket& b){
+//     return a.getTicketID() <= b.getTicketID();
+// }

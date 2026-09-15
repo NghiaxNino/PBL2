@@ -115,37 +115,34 @@ class AirlineBookingSystem{
         void employeeMenu();
         void ticketMenu();
         
-        void addFlight();
-        void deleteFlight();
-        void updateFlight();
-        int searchFlight(string flightID);
+        void addFlight(bool (*cmp)(string, string));
+        void deleteFlight(bool (*cmp)(string, string));
+        void updateFlight(bool (*cmp)(string, string));
+        int searchFlight(string flightID, bool (*cmp)(string, string));
         void displayFlights();
 
-        void addPassenger();
-        void deletePassenger();
-        void updatePassenger();
-        int searchPassenger(string passengerID);
+        void addPassenger(bool (*cmp)(string, string));
+        void deletePassenger(bool (*cmp)(string, string));
+        void updatePassenger(bool (*cmp)(string, string));
+        int searchPassenger(string passengerID, bool (*cmp)(string, string));
         void displayPassengers();
 
-        void addEmployee();
-        void deleteEmployee();
-        void updateEmployee();
-        int searchEmployee(string employeeID);
+        void addEmployee(bool (*cmp)(string, string));
+        void deleteEmployee(bool (*cmp)(string, string));
+        void updateEmployee(bool (*cmp)(string, string));
+        int searchEmployee(string employeeID, bool (*cmp)(string, string));
         void displayEmployees();
 
-        void createTicket();
-        void cancelTicket();
-        int searchTicket(string ticketID);
+        void createTicket(bool (*cmp)(string, string));
+        void cancelTicket(bool (*cmp)(string, string));
+        int searchTicket(string ticketID, bool (*cmp)(string, string));
         void displayTickets();
 
-        void sortPassengerByID();
-        void sortTicketByID();
+        void sortPassengerByID(int left, int right, bool (*cmp)(string, string));
+        void sortTicketByID(int left, int right, bool (*cmp)(string, string));
+        void sortFlightByID(int left, int right, bool (*cmp)(string, string));
 
-        void mergeFlight(int left, int mid, int right);
-        void mergeSortFlight(int left, int right);
-        void sortFlightByID();
-
-        void sortEmployeeByRole();
+        void sortEmployeeByRole(int left, int right, bool (*cmp)(string, string));
 
         void sortFlightByTime();
         void sortPassengerByName();

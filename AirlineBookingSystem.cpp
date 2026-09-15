@@ -14,7 +14,105 @@ bool compareTicket(const Ticket& a, const Ticket& b){
     return a.getTicketID() <= b.getTicketID();
 }
 
+#include <string>
 
+bool ascending(string a, string b){
+    return a < b;
+}
+bool descending(string a, string b){
+    return a > b;
+}
+void mergeFlight(Flight* base, int left, int mid, int right, bool (*cmp)(string, string)){
+    int n1 = mid - left +1;
+    int n2 = right - mid;
+
+    Flight* L = new Flight[n1];
+    Flight* R = new Flight[n2];
+
+    for (int i = 0; i < n1; i++) L[i]=base[left+i];
+    for (int j = 0; j < n2; j++) R[j]=base[mid+1+j];
+
+    int i=0; int j=0; int k=left;
+    while (i < n1 && j< n2){
+        if ( cmp(L[i].getFlightID(), R[j].getFlightID()) ){
+            base[k++] = L[i++];
+        }
+        else{
+            base[k++] = R[j++];
+        }
+    }
+    while (i < n1) base[k++] = L[i++];
+    while (j < n2) base[k++] = R[j++];
+
+    delete[] L;
+    delete[] R;
+}
+void mergePassenger(Passenger* base, int left, int mid, int right, bool (*cmp)(string, string)){
+    int n1 = mid - left +1;
+    int n2 = right - mid;
+
+    Passenger* L = new Passenger[n1];
+    Passenger* R = new Passenger[n2];
+    
+    for (int i=0; i < n1; i++) L[i] = base[left+i];
+    for (int j=0; j < n2; j++) R[j] = base[mid +1 +j];
+
+    int i=0;
+    int j=0;
+    int k=left;
+
+    while (i < n1 && j < n2){
+        if(cmp(L[i].getPassengerID(), R[j].getPassengerID())) base[k++] = L[i++];
+        else base[k++] = R[j++];
+    }
+    while (i < n1) base[k++] = L[i++];
+    while (j < n2) base[k++] = R[j++];
+
+    delete[] L;
+    delete[] R;
+}
+void mergeTicket(Ticket* base, int left, int mid, int right, bool (*cmp)(string, string)){
+    int n1 = mid - left +1;
+    int n2 = right - mid;
+
+    Ticket* L = new Ticket[n1];
+    Ticket* R = new Ticket[n2];
+
+    for (int i = 0; i < n1; i++) L[i] = base[left+i];
+    for (int j = 0; j < n2; j++) R[j] = base[mid +1 +j];
+
+    int i=0; int j=0; int k= left;
+    while(i < n1 && j < n2){
+        if (cmp(L[i].getTicketID(), R[j].getTicketID())) base[k++] = L[i++];
+        else base[k++] = R[j++];
+    }
+    while (i < n1) base[k++] = L[i++];
+    while (j < n2) base[k++] = R[j++];
+
+    delete[] L;
+    delete[] R;
+}
+void mergeEmployee(Employee* base, int left, int mid, int right, bool (*cmp)(string, string)){
+    int n1 = mid - left +1;
+    int n2 = right - mid;
+
+    Employee* L = new Employee[n1];
+    Employee* R = new Employee[n2];
+
+    for (int i = 0; i < n1; i++) L[i] = base[left+i];
+    for (int j = 0; j < n2; j++) R[j] = base[mid +1 +j];
+
+    int i=0; int j=0; int k= left;
+    while(i < n1 && j < n2){
+        if (cmp(L[i].getRole(), R[j].getRole())) base[k++] = L[i++];
+        else base[k++] = R[j++];
+    }
+    while (i < n1) base[k++] = L[i++];
+    while (j < n2) base[k++] = R[j++];
+
+    delete[] L;
+    delete[] R;
+}
 AirlineBookingSystem::AirlineBookingSystem(){
     flight = NULL;
     passenger = NULL;
@@ -34,43 +132,17 @@ AirlineBookingSystem::~AirlineBookingSystem(){
     delete[] ticket;
 }
 
-// void AirlineBookingSystem::sortFlightByID(){
-//     for(int i = 0; i < flightCount - 1; i++){
-//         for(int j = i + 1; j < flightCount; j++){
-//             if(flight[i].getFlightID() > flight[j].getFlightID()){
-//                 Flight temp = flight[i];
-//                 flight[i] = flight[j];
-//                 flight[j] = temp;
-//             }
-//         }
-//     }
-// }
-
-void AirlineBookingSystem::mergeFlight(int left, int mid, int right){
-    Flight* temp = new Flight[flightCount];
-    int i = left;
-    int j = mid + 1;
-    int k = left;
-
-    while(i <= mid && j <= right){
-        if(flight[i].getFlightID() <= flight[j].getFlightID()) temp[k++] = flight[i++];
-        else temp[k++] = flight[j++];
+void AirlineBookingSystem::sortFlightByID(int left, int right, bool (*cmp)(string, string)){
+    if(left < right){
+        int mid = left + (right - left) / 2;
+        sortFlightByID(left, mid, cmp);
+        sortFlightByID(mid + 1, right, cmp);
+        mergeFlight(flight, left, mid, right, cmp);
     }
-    while(i <= mid) temp[k++] = flight[i++];
-    while(j <= right) temp[k++] = flight[j++];
-    for(i = left; i <= right; i++) flight[i] = temp[i];
-    delete[] temp;
+    else return;   
 }
 
-void AirlineBookingSystem::mergeSortFlight(int left, int right){
-    if(left >= right) return;
-    int mid = (left + right) / 2;
-    mergeSortFlight(left, mid);
-    mergeSortFlight(mid + 1, right);
-    mergeFlight(left, mid, right);
-}
-
-void AirlineBookingSystem::addFlight(){
+void AirlineBookingSystem::addFlight(bool (*cmp)(string, string) = ascending){
     Flight* temp = new Flight[flightCount + 1];
     for(int i = 0; i < flightCount; i++){
         temp[i] = flight[i];
@@ -80,7 +152,7 @@ void AirlineBookingSystem::addFlight(){
     delete[] flight;
     flight = temp;
     flightCount++;
-    mergeSortFlight(0, flightCount - 1);
+    sortFlightByID(0, flightCount - 1, cmp);
     cout << "Them thanh cong\n";
 }
 
@@ -95,23 +167,23 @@ void AirlineBookingSystem::displayFlights(){
     }
 }
 
-int AirlineBookingSystem::searchFlight(string flightID){
+int AirlineBookingSystem::searchFlight(string flightID, bool (*cmp)(string, string) = ascending){
     int left = 0;
     int right = flightCount - 1;
     while(left <= right){
         int mid = (left + right) / 2;
         if(flight[mid].getFlightID() == flightID) return mid;
-        if(flight[mid].getFlightID() < flightID) left = mid + 1;
+        if(cmp(flight[mid].getFlightID(), flightID)) left = mid + 1;
         else right = mid - 1;
     }
     return -1;
 }
 
-void AirlineBookingSystem::deleteFlight(){
+void AirlineBookingSystem::deleteFlight(bool (*cmp)(string, string) = ascending){
     string flightID;
     cout << "Nhap ma chuyen bay can xoa: ";
     cin >> flightID;
-    int pos = searchFlight(flightID);
+    int pos = searchFlight(flightID, cmp);
     if(pos == -1){
         cout << "Khong tim thay\n";
         return;
@@ -127,33 +199,30 @@ void AirlineBookingSystem::deleteFlight(){
     cout << "Xoa thanh cong\n";
 }
 
-void AirlineBookingSystem::updateFlight(){
+void AirlineBookingSystem::updateFlight(bool (*cmp)(string, string) = ascending){
     string flightID;
     cout << "Nhap ma chuyen bay can cap nhat: ";
     cin >> flightID;
-    int pos = searchFlight(flightID);
+    int pos = searchFlight(flightID, cmp);
     if(pos == -1){
-        cout << "Khong tim thay\n";
+        cout << "Khong tim thay!\n";
         return;
     }
     cin.ignore();
     flight[pos].updateInfo();
-    cout << "Cap nhat thanh cong\n";
+    cout << "Cap nhat thanh cong!\n";
 }
 
-void AirlineBookingSystem::sortPassengerByID(){
-    for(int i = 0; i < passengerCount - 1; i++){
-        for(int j = i + 1; j < passengerCount; j++){
-            if(passenger[i].getPassengerID() >passenger[j].getPassengerID()){
-                Passenger temp =passenger[i];
-               passenger[i] =passenger[j];
-               passenger[j] = temp;
-            }
-        }
+void AirlineBookingSystem::sortPassengerByID(int left, int right, bool (*cmp)(string, string)){
+    if(left < right){
+        int mid = left + (right - left) / 2;
+        sortPassengerByID(left, mid, cmp);
+        sortPassengerByID(mid + 1, right, cmp);
+        mergePassenger(passenger, left, mid, right, cmp);
     }
+    else return;
 }
-
-void AirlineBookingSystem::addPassenger(){
+void AirlineBookingSystem::addPassenger(bool (*cmp)(string, string) = ascending){
     Passenger* temp = new Passenger[passengerCount + 1];
     for(int i = 0; i < passengerCount; i++) temp[i] = passenger[i];
     
@@ -162,17 +231,17 @@ void AirlineBookingSystem::addPassenger(){
     delete[] passenger;
     passenger = temp;
     passengerCount++;
-    sortPassengerByID();
-    cout << "Them hanh khach thanh cong\n";
+    sortPassengerByID(0, passengerCount - 1, cmp);
+    cout << "Them hanh khach thanh cong!\n";
 }
 
-int AirlineBookingSystem::searchPassenger(string passengerID){
+int AirlineBookingSystem::searchPassenger(string passengerID, bool (*cmp)(string, string) = ascending){
     int left = 0;
     int right = passengerCount - 1;
     while(left <= right){
         int mid = (left + right) / 2;
         if(passenger[mid].getPassengerID() == passengerID) return mid;
-        if(passenger[mid].getPassengerID() < passengerID) left = mid + 1;
+        if(cmp(passenger[mid].getPassengerID(), passengerID)) left = mid + 1;
         else right = mid - 1;
     }
     return -1;
@@ -180,7 +249,7 @@ int AirlineBookingSystem::searchPassenger(string passengerID){
 
 void AirlineBookingSystem::displayPassengers(){
     if(passengerCount == 0){
-        cout << "Danh sach rong\n";
+        cout << "Danh sach rong!\n";
         return;
     }
     for(int i = 0; i < passengerCount; i++){
@@ -189,11 +258,11 @@ void AirlineBookingSystem::displayPassengers(){
     }
 }
 
-void AirlineBookingSystem::deletePassenger(){
+void AirlineBookingSystem::deletePassenger(bool (*cmp)(string, string) = ascending){
     string passengerID;
     cout << "Nhap ma hanh khach can xoa: ";
     cin >> passengerID;
-    int pos = searchPassenger(passengerID);
+    int pos = searchPassenger(passengerID, cmp);
     if(pos == -1){
         cout << "Khong tim thay\n";
         return;
@@ -209,13 +278,13 @@ void AirlineBookingSystem::deletePassenger(){
     cout << "Xoa thanh cong\n";
 }
 
-void AirlineBookingSystem::updatePassenger(){
+void AirlineBookingSystem::updatePassenger(bool (*cmp)(string, string) = ascending){
     string passengerID;
     cout << "Nhap ma hanh khach can cap nhat: ";
     cin >> passengerID;
-    int pos = searchPassenger(passengerID);
+    int pos = searchPassenger(passengerID, cmp);
     if(pos == -1){
-        cout << "Khong tim thay\n";
+        cout << "Khong tim thay!\n";
         return;
     }
     cin.ignore();
@@ -223,19 +292,17 @@ void AirlineBookingSystem::updatePassenger(){
     cout << "Cap nhat thanh cong\n";
 }
 
-void AirlineBookingSystem::sortEmployeeByRole(){
-    for(int i = 0; i < employeeCount - 1; i++){
-        for(int j = i + 1; j < employeeCount; j++){
-            if(employee[i].getEmployeeID() > employee[j].getEmployeeID()){
-                Employee temp = employee[i];
-                employee[i] = employee[j];
-                employee[j] = temp;
-            }
-        }
+void AirlineBookingSystem::sortEmployeeByRole(int left, int right, bool (*cmp)(string, string)){
+    if(left < right){
+        int mid = left + (right - left) / 2;
+        sortEmployeeByRole(left, mid, cmp);
+        sortEmployeeByRole(mid + 1, right, cmp);
+        mergeEmployee(employee, left, mid, right, cmp);
     }
+    else return;
 }
 
-void AirlineBookingSystem::addEmployee(){
+void AirlineBookingSystem::addEmployee(bool (*cmp)(string, string) = ascending){
     Employee* temp = new Employee[employeeCount + 1];
     for(int i = 0; i < employeeCount; i++) temp[i] = employee[i];
     cin.ignore();
@@ -243,15 +310,15 @@ void AirlineBookingSystem::addEmployee(){
     delete[] employee;
     employee = temp;
     employeeCount++;
-    sortEmployeeByRole();
-    cout << "Them nhan vien thanh cong\n";
+    sortEmployeeByRole(0, employeeCount - 1, cmp);
+    cout << "Them nhan vien thanh cong!\n";
 }
 
-void AirlineBookingSystem::deleteEmployee(){
+void AirlineBookingSystem::deleteEmployee(bool (*cmp)(string, string) = ascending){
     string employeeID;
     cout << "Nhap ma nhan vien can xoa: ";
     cin >> employeeID;
-    int pos = searchEmployee(employeeID);
+    int pos = searchEmployee(employeeID, cmp);
     if(pos == -1){
         cout << "Khong tim thay\n";
         return;
@@ -264,7 +331,7 @@ void AirlineBookingSystem::deleteEmployee(){
     delete[] employee;
     employee = temp;
     employeeCount--;
-    cout << "Xoa thanh cong\n";
+    cout << "Xoa thanh cong!\n";
 }
 
 void AirlineBookingSystem::displayEmployees(){
@@ -278,13 +345,13 @@ void AirlineBookingSystem::displayEmployees(){
     }
 }
 
-void AirlineBookingSystem::updateEmployee(){
+void AirlineBookingSystem::updateEmployee(bool (*cmp)(string, string) = ascending){
     string employeeID;
     cout << "Nhap ma nhan vien can cap nhat: ";
     cin >> employeeID;
-    int pos = searchEmployee(employeeID);
+    int pos = searchEmployee(employeeID, cmp);
     if(pos == -1){
-        cout << "Khong tim thay\n";
+        cout << "Khong tim thay!\n";
         return;
     }
     cin.ignore();
@@ -292,31 +359,29 @@ void AirlineBookingSystem::updateEmployee(){
     cout << "Cap nhat thanh cong\n";
 }
 
-void AirlineBookingSystem::sortTicketByID(){
-    for(int i = 0; i < ticketCount - 1; i++){
-        for(int j = i + 1; j < ticketCount; j++){
-            if(ticket[i].getTicketID() > ticket[j].getTicketID()){
-                Ticket temp = ticket[i];
-                ticket[i] = ticket[j];
-                ticket[j] = temp;
-            }
-        }
+void AirlineBookingSystem::sortTicketByID(int left, int right, bool (*cmp)(string, string)){
+    if(left < right){
+        int mid = left + (right - left) / 2;
+        sortTicketByID(left, mid, cmp);
+        sortTicketByID(mid + 1, right, cmp);
+        mergeTicket(ticket, left, mid, right, cmp);
     }
+    else return;
 }
 
-int AirlineBookingSystem::searchTicket(string ticketID){
+int AirlineBookingSystem::searchTicket(string ticketID, bool (*cmp)(string, string) = ascending){
     int left = 0;
     int right = ticketCount - 1;
     while(left <= right){
         int mid = (left + right) / 2;
         if(ticket[mid].getTicketID() == ticketID) return mid;
-        if(ticket[mid].getTicketID() < ticketID) left = mid + 1;
+        if(cmp(ticket[mid].getTicketID(), ticketID)) left = mid + 1;
         else right = mid - 1;
     }
     return -1;
 }
 
-void AirlineBookingSystem::createTicket(){
+void AirlineBookingSystem::createTicket(bool (*cmp)(string, string) = ascending){
     Ticket* temp = new Ticket[ticketCount + 1];
     for(int i = 0; i < ticketCount; i++) temp[i] = ticket[i];
     cin.ignore();
@@ -324,17 +389,17 @@ void AirlineBookingSystem::createTicket(){
     delete[] ticket;
     ticket = temp;
     ticketCount++;
-    sortTicketByID();
+    sortTicketByID(0, ticketCount - 1, cmp);
     cout << "Dat ve thanh cong\n";
 }
 
-void AirlineBookingSystem::cancelTicket(){
+void AirlineBookingSystem::cancelTicket(bool (*cmp)(string, string) = ascending){
     string ticketID;
     cout << "Nhap ma ve can huy: ";
     cin >> ticketID;
-    int pos = searchTicket(ticketID);
+    int pos = searchTicket(ticketID, cmp);
     if(pos == -1){
-        cout << "Khong tim thay ve\n";
+        cout << "Khong tim thay ve!\n";
         return;
     }
     ticket[pos].cancelTicket();
@@ -354,7 +419,6 @@ void AirlineBookingSystem::displayTickets(){
 
 void AirlineBookingSystem::menu(){
     int choice;
-
     do{
         cout << "\n===================================\n";
         cout << " AIRLINE BOOKING SYSTEM\n";
@@ -417,7 +481,7 @@ void AirlineBookingSystem::flightMenu(){
                 cout << "Nhap ma chuyen bay: ";
                 cin >> id;
                 int pos = searchFlight(id);
-                if(pos == -1) cout << "Khong tim thay\n";
+                if(pos == -1) cout << "Khong tim thay!\n";
                 else flight[pos].output();
                 break;
             }
@@ -456,7 +520,7 @@ void AirlineBookingSystem::passengerMenu(){
                 cout << "Nhap ma hanh khach: ";
                 cin >> id;
                 int pos = searchPassenger(id);
-                if(pos == -1) cout << "Khong tim thay\n";
+                if(pos == -1) cout << "Khong tim thay!\n";
                 else passenger[pos].output();
                 break;
             }
@@ -520,7 +584,7 @@ void AirlineBookingSystem::ticketMenu(){
                 cout << "Nhap ma ve: ";
                 cin >> id;
                 int pos = searchTicket(id);
-                if(pos == -1) cout << "Khong tim thay\n";
+                if(pos == -1) cout << "Khong tim thay!\n";
                 else ticket[pos].output();
                 break;
             }

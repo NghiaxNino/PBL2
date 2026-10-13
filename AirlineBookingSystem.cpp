@@ -14,6 +14,21 @@ bool compareTicket(const Ticket& a, const Ticket& b){
     return a.getTicketID() <= b.getTicketID();
 }
 
+bool AirlineBookingSystem::employeeLogin(string &role){
+    string user, pass;
+    cout << "Username: ";
+    getline(cin, user);
+    cout << "Password: ";
+    getline(cin, pass);
+
+    for(int i = 0; i < employeeCount; i++){
+        if(employee[i].login(user, pass)){
+            role = employee[i].getRole();
+            return true;
+        }
+    }
+    return false;
+}
 
 AirlineBookingSystem::AirlineBookingSystem(){
     flight = NULL;
@@ -176,6 +191,14 @@ void AirlineBookingSystem::updatePassenger(){
     cout << "Cap nhat thanh cong\n";
 }
 
+int AirlineBookingSystem::searchEmployee(string employeeID){
+    for(int i = 0; i < employeeCount; i++){
+        if(employee[i].getEmployeeID() == employeeID)
+            return i;
+    }
+    return -1;
+}
+
 void AirlineBookingSystem::addEmployee(){
     Employee* temp = new Employee[employeeCount + 1];
     for(int i = 0; i < employeeCount; i++) temp[i] = employee[i];
@@ -246,13 +269,29 @@ int AirlineBookingSystem::searchTicket(string ticketID){
 }
 
 void AirlineBookingSystem::createTicket(){
-    Ticket* temp = new Ticket[ticketCount + 1];
-    for(int i = 0; i < ticketCount; i++) temp[i] = ticket[i];
+    Ticket newTicket;
     cin.ignore();
-    temp[ticketCount].input();
+    newTicket.input();
+
+    int flightPos = searchFlight(newTicket.getFlightID());
+    if(flightPos == -1){
+        cout << "Chuyen bay khong ton tai!\n";
+        return;
+    }
+    if(flight[flightPos].isFull()){
+        cout << "Chuyen bay da het cho!\n";
+        return;
+    }
+
+    Ticket* temp = new Ticket[ticketCount + 1];
+    for(int i = 0; i < ticketCount; i++){
+        temp[i] = ticket[i];
+    }
+    temp[ticketCount] = newTicket;
     delete[] ticket;
     ticket = temp;
     ticketCount++;
+    flight[flightPos].increaseBookedSeats();
     mergeSort(ticket, 0, ticketCount - 1, compareTicket);
     cout << "Dat ve thanh cong\n";
 }
@@ -266,6 +305,9 @@ void AirlineBookingSystem::cancelTicket(){
         cout << "Khong tim thay ve\n";
         return;
     }
+
+    int flightPos = searchFlight(ticket[pos].getFlightID());
+    if(flightPos != -1) flight[flightPos].decreaseBookedSeats();
     ticket[pos].cancelTicket();
     cout << "Huy ve thanh cong\n";
 }
@@ -280,6 +322,7 @@ void AirlineBookingSystem::displayTickets(){
         cout << endl;
     }
 }
+
 
 void AirlineBookingSystem::menu(){
     int choice;
@@ -453,6 +496,27 @@ void AirlineBookingSystem::ticketMenu(){
             }
             case 4:
                 displayTickets();
+                break;
+        }
+
+    }while(choice != 0);
+}
+void AirlineBookingSystem::staffMenu(){
+    int choice;
+    do{
+        cout << "\n===== STAFF MENU =====\n";
+        cout << "1. Quan ly hanh khach\n";
+        cout << "2. Quan ly ve\n";
+        cout << "0. Dang xuat\n";
+        cout << "Lua chon: ";
+
+        cin >> choice;
+        switch(choice){
+            case 1:
+                passengerMenu();
+                break;
+            case 2:
+                ticketMenu();
                 break;
         }
 

@@ -94,7 +94,6 @@ void Employee::output(){
     cout << "Ma nhan vien: " << ID << endl;
     cout << "Ho ten: " << fullName << endl;
     cout << "Chuc vu: " << role << endl;
-    cout << "Username: " << username << endl;
 }
 
 void Employee::updateInfo(){

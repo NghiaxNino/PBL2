@@ -148,7 +148,9 @@ class AirlineBookingSystem{
         // void sortEmployeeByRole(int left, int right, );
         void sortFlightByTime();
         void sortPassengerByName();
-        
+
+        bool employeeLogin(string &role);
+        void staffMenu();
 
 };
 #endif

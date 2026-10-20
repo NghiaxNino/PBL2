@@ -184,5 +184,7 @@ class AirlineBookingSystem{
         void readFlight();
         void saveFlight();
 
+        
+        //menu tạo tài khoản
 };
 #endif

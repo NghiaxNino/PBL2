@@ -3,15 +3,15 @@
 int main(){
     AirlineBookingSystem system1;
 
-    system1.readPassengers();
-    system1.readEmployees();
-    system1.readFlights();
+    system1.readPassenger();
+    system1.readEmployee();
+    system1.readFlight();
     
     system1.Menu();
 
-    system1.savePassengers();
-    system1.saveEmployees();
-    system1.saveFlights();
+    system1.savePassenger();
+    system1.saveEmployee();
+    system1.saveFlight();
 
     system("pause");
     return 0;

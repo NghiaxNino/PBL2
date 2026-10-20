@@ -25,6 +25,10 @@ Passenger::Passenger(){
 }
 
 void Passenger::input(){
+    cout << "Nhap username: ";
+    getline(cin, username);
+    cout << "Nhap password: ";
+    getline(cin, password);
     cout << "Nhap ma hanh khach: ";
     getline(cin, ID);
     cout << "Nhap ho ten: ";
@@ -63,12 +67,52 @@ void Passenger::updateInfo(){
     cout << "Nhap email moi: ";
     getline(cin, email);
 }
+
 bool Passenger::login(string username, string password){
     return this->username == username && this->password == password;
 }
+
 string Passenger::getPassengerID() const{
     return ID;
 }
+
+string Passenger::getGender() const{
+    return gender;
+}
+
+string Passenger::getCitizenID() const{
+    return citizenID;
+}
+
+string Passenger::getPhoneNumber() const{
+    return phoneNumber;
+}
+
+string Passenger::getEmail() const{
+    return email;
+}
+
+string Passenger::getUsername() const{
+    return username;
+}
+
+string Passenger::getPassword() const{
+    return password;
+}
+
+void Passenger::setPassengerData(string id, string fullname, string username, string password,
+                              string gender, string citizenID, string phoneNumber, string email)
+{
+    this->ID = id;
+    this->fullName = fullname;
+    this->username = username;
+    this->password = password;
+    this->gender = gender;
+    this->citizenID = citizenID;
+    this->phoneNumber = phoneNumber;
+    this->email = email;
+}
+
 
  Employee::Employee(){
     role = "";
@@ -103,6 +147,14 @@ void Employee::updateInfo(){
     getline(cin, role);
 }
 
+string Employee::getUsername() const{
+    return username;
+}
+
+string Employee::getPassword() const{
+    return password;
+}
+
 bool Employee::login(string username, string password){
     return this->username == username && this->password == password;
 }
@@ -113,4 +165,12 @@ string Employee::getRole() const{
 
 string Employee::getEmployeeID() const{
     return ID;
+}
+
+void Employee::setEmployeeData(string id, string fullname, string role, string username, string password){
+    this->ID = id;
+    this->fullName = fullname;
+    this->role = role;
+    this->username = username;
+    this->password = password;
 }

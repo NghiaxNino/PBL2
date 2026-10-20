@@ -1,0 +1,2 @@
+P001|Nguyen Van A|user1|123|Nam|123456789012|0905123456|a@gmail.com
+P002|Tran Thi B|user2|123|Nu|123456789013|0905123457|b@gmail.com

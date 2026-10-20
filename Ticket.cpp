@@ -10,11 +10,16 @@ Ticket::Ticket(){
     status = "";
 }
 
-void Ticket::input(){
+void Ticket::input(string passengerID){
     cout << "Nhap ma ve: ";
     getline(cin, ticketID);
-    cout << "Nhap ma hanh khach: ";
-    getline(cin, passengerID);
+    if(passengerID == ""){
+        cout << "Nhap ma hanh khach: ";
+        getline(cin, this->passengerID);
+    }
+    else{
+        this->passengerID = passengerID;
+    }
     cout << "Nhap ma chuyen bay: ";
     getline(cin, flightID);
     cout << "Nhap ma ghe: ";

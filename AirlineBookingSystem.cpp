@@ -14,20 +14,36 @@ bool compareTicket(const Ticket& a, const Ticket& b){
     return a.getTicketID() <= b.getTicketID();
 }
 
-bool AirlineBookingSystem::employeeLogin(string &role){
-    string user, pass;
+int AirlineBookingSystem::employeeLogin(){
+    string username, password;
+    cin.ignore();
     cout << "Username: ";
-    getline(cin, user);
+    getline(cin, username);
     cout << "Password: ";
-    getline(cin, pass);
+    getline(cin, password);
 
     for(int i = 0; i < employeeCount; i++){
-        if(employee[i].login(user, pass)){
-            role = employee[i].getRole();
-            return true;
+        if(employee[i].login(username, password)){
+            return i;
         }
     }
-    return false;
+    return -1;
+}
+
+int AirlineBookingSystem::passengerLogin(){
+    string username, password;
+    cin.ignore();
+    cout << "Username: ";
+    getline(cin, username);
+    cout << "Password: ";
+    getline(cin, password);
+
+    for(int i = 0; i < passengerCount; i++){
+        if(passenger[i].login(username, password)){
+            return i;
+        }
+    }
+    return -1;
 }
 
 AirlineBookingSystem::AirlineBookingSystem(){
@@ -268,7 +284,7 @@ int AirlineBookingSystem::searchTicket(string ticketID){
     return -1;
 }
 
-void AirlineBookingSystem::createTicket(){
+void AirlineBookingSystem::createTicket(string passengerID){
     Ticket newTicket;
     cin.ignore();
     newTicket.input();
@@ -296,13 +312,38 @@ void AirlineBookingSystem::createTicket(){
     cout << "Dat ve thanh cong\n";
 }
 
-void AirlineBookingSystem::cancelTicket(){
+void AirlineBookingSystem::cancelTicket(string passengerID){
+    if(passengerID == ""){
+        cout << "\n===== DANH SACH VE =====\n";
+        displayTickets();
+    }
+    else{
+        bool found = false;
+        cout << "\n===== DANH SACH VE =====\n";
+        for(int i = 0; i < ticketCount; i++){
+            if(ticket[i].getPassengerID() == passengerID){
+                ticket[i].output();
+                cout << endl;
+                found = true;
+            }
+        }
+        if(!found){
+            cout << "Ban chua co ve nao\n";
+            return;
+        }
+    }
+
     string ticketID;
     cout << "Nhap ma ve can huy: ";
     cin >> ticketID;
     int pos = searchTicket(ticketID);
     if(pos == -1){
         cout << "Khong tim thay ve\n";
+        return;
+    }
+
+    if(passengerID != "" && ticket[pos].getPassengerID() != passengerID){
+        cout << "Ve khong hop le\n";
         return;
     }
 
@@ -323,13 +364,49 @@ void AirlineBookingSystem::displayTickets(){
     }
 }
 
+void AirlineBookingSystem::Menu(){
+    int choice;
 
-void AirlineBookingSystem::menu(){
+    do{
+        cout << "\n=============================\n";
+        cout << " AIRLINE BOOKING SYSTEM\n";
+        cout << "=============================\n";
+        cout << "1. Dang nhap nhan vien\n";
+        cout << "2. Dang nhap hanh khach\n";
+        cout << "3. Xem danh sach chuyen bay\n";
+        cout << "0. Thoat\n";
+        cout << "Lua chon: ";
+
+        cin >> choice;
+
+        switch(choice){
+            case 1:{
+                int pos = employeeLogin();
+                if(pos != -1){
+                    if(employee[pos].getRole() == "Manager") managerMenu();
+                    else if(employee[pos].getRole() == "Staff") staffMenu();
+                }
+                else cout << "Dang nhap that bai\n";
+                break;
+            }
+
+            case 2:{
+                int pos = passengerLogin();
+                if(pos != -1) passengerMenu(pos);
+                else cout << "Dang nhap that bai\n";
+                break;
+            }
+            case 3:
+                displayFlights();
+                break;
+        }
+    }while(choice != 0);
+}
+
+void AirlineBookingSystem::managerMenu(){
     int choice;
     do{
-        cout << "\n===================================\n";
-        cout << " AIRLINE BOOKING SYSTEM\n";
-        cout << "===================================\n";
+        cout << "\n===== MANAGER MENU =====\n";
         cout << "1. Quan ly chuyen bay\n";
         cout << "2. Quan ly hanh khach\n";
         cout << "3. Quan ly nhan vien\n";
@@ -343,7 +420,7 @@ void AirlineBookingSystem::menu(){
                 flightMenu();
                 break;
             case 2:
-                passengerMenu();
+                e_passengerMenu();
                 break;
             case 3:
                 employeeMenu();
@@ -353,6 +430,65 @@ void AirlineBookingSystem::menu(){
                 break;
             case 0:
                 cout << "Thoat\n";
+                break;
+        }
+
+    }while(choice != 0);
+}
+
+void AirlineBookingSystem::passengerMenu(int pos){
+    int choice;
+
+    do{
+        cout << "\n===== PASSENGER MENU =====\n";
+        cout << "1. Xem danh sach chuyen bay\n";
+        cout << "2. Dat ve\n";
+        cout << "3. Huy ve\n";
+        cout << "4. Xem thong tin ca nhan\n";
+        cout << "5. Cap nhat thong tin ca nhan\n";
+        cout << "0. Dang xuat\n";
+        cout << "Lua chon: ";
+
+        cin >> choice;
+
+        switch(choice){
+            case 1:
+                displayFlights();
+                break;
+            case 2:
+                createTicket(passenger[pos].getPassengerID());
+                break;
+            case 3:
+                cancelTicket(passenger[pos].getPassengerID());
+                break;
+            case 4:
+                passenger[pos].output();
+                break;
+            case 5:
+                cin.ignore();
+                passenger[pos].updateInfo();
+                break;
+        }
+
+    }while(choice != 0);
+}
+
+void AirlineBookingSystem::staffMenu(){
+    int choice;
+    do{
+        cout << "\n===== STAFF MENU =====\n";
+        cout << "1. Quan ly hanh khach\n";
+        cout << "2. Quan ly ve\n";
+        cout << "0. Dang xuat\n";
+        cout << "Lua chon: ";
+
+        cin >> choice;
+        switch(choice){
+            case 1:
+                e_passengerMenu();
+                break;
+            case 2:
+                ticketMenu();
                 break;
         }
 
@@ -397,7 +533,7 @@ void AirlineBookingSystem::flightMenu(){
         }
     }while(choice != 0);
 }
-void AirlineBookingSystem::passengerMenu(){
+void AirlineBookingSystem::e_passengerMenu(){
     int choice;
 
     do{
@@ -466,6 +602,7 @@ void AirlineBookingSystem::employeeMenu(){
 
     }while(choice != 0);
 }
+
 void AirlineBookingSystem::ticketMenu(){
     int choice;
     do{
@@ -501,24 +638,156 @@ void AirlineBookingSystem::ticketMenu(){
 
     }while(choice != 0);
 }
-void AirlineBookingSystem::staffMenu(){
-    int choice;
-    do{
-        cout << "\n===== STAFF MENU =====\n";
-        cout << "1. Quan ly hanh khach\n";
-        cout << "2. Quan ly ve\n";
-        cout << "0. Dang xuat\n";
-        cout << "Lua chon: ";
 
-        cin >> choice;
-        switch(choice){
-            case 1:
-                passengerMenu();
-                break;
-            case 2:
-                ticketMenu();
-                break;
+void AirlineBookingSystem::readPassenger(){
+    ifstream fin("person.passenger.txt");
+    if(!fin){
+        cout << "Khong mo duoc person.passenger.txt\n";
+        return;
+    }
+    string line;
+
+    while(getline(fin, line)){
+        stringstream ss(line); 
+        string id, fullname, username, password, gender, citizenID, phoneNumber, email;
+
+        getline(ss, id, '|');
+        getline(ss, fullname, '|');
+        getline(ss, username, '|');
+        getline(ss, password, '|');
+        getline(ss, gender, '|');
+        getline(ss, citizenID, '|');
+        getline(ss, phoneNumber, '|');
+        getline(ss, email, '|');
+
+        Passenger* temp = new Passenger[passengerCount + 1];
+        for(int i = 0; i < passengerCount; i++){
+            temp[i] = passenger[i];
         }
 
-    }while(choice != 0);
+        temp[passengerCount].setPassengerData(
+            id, fullname, username, password, gender, citizenID, phoneNumber, email
+        );
+
+        delete[] passenger;
+        passenger = temp;
+        passengerCount++;
+    }
+    fin.close();
+}
+
+void AirlineBookingSystem::savePassenger(){
+    ofstream fout("person.passenger.txt");
+    for(int i = 0; i < passengerCount; i++){
+        fout << passenger[i].getPassengerID() << "|"
+             << passenger[i].getFullName() << "|"
+             << passenger[i].getUsername() << "|"
+             << passenger[i].getPassword() << "|"
+             << passenger[i].getGender() << "|"
+             << passenger[i].getCitizenID() << "|"
+             << passenger[i].getPhoneNumber() << "|"
+             << passenger[i].getEmail()
+             << "\n";
+    }
+    fout.close();
+}
+
+void AirlineBookingSystem::readEmployee(){
+    ifstream fin("person.employee.txt");
+    if(!fin){
+        cout << "Khong mo duoc person.employee.txt\n";
+        return;
+    }
+
+    string line;
+    while(getline(fin, line)){
+        stringstream ss(line);
+        string id, fullname, role, username, password;
+
+        getline(ss, id, '|');
+        getline(ss, fullname, '|');
+        getline(ss, role, '|');
+        getline(ss, username, '|');
+        getline(ss, password, '|');
+
+        Employee* temp = new Employee[employeeCount + 1];
+        for(int i = 0; i < employeeCount; i++){
+            temp[i] = employee[i];
+        }
+        temp[employeeCount].setEmployeeData(
+            id, fullname, role, username, password
+        );
+
+        delete[] employee;
+        employee = temp;
+        employeeCount++;
+    }
+    fin.close();
+}
+
+void AirlineBookingSystem::saveEmployee(){
+    ofstream fout("person.employee.txt");
+    for(int i = 0; i < employeeCount; i++){
+        fout << employee[i].getEmployeeID() << "|"
+             << employee[i].getFullName() << "|"
+             << employee[i].getRole() << "|"
+             << employee[i].getUsername() << "|"
+             << employee[i].getPassword() 
+             << "\n";
+    }
+    fout.close();
+}
+
+void AirlineBookingSystem::readFlight(){
+    ifstream fin("flight.txt");
+    if(!fin){
+        cout << "Khong mo duoc flight.txt\n";
+        return;
+    }
+
+    string line;
+    while(getline(fin, line)){
+        stringstream ss(line);
+        string flightID, departure, destination, departureTime, arrivalTime, status, totalSeatsStr, bookedSeatsStr;
+
+        getline(ss, flightID, '|');
+        getline(ss, departure, '|');
+        getline(ss, destination, '|');
+        getline(ss, departureTime, '|');
+        getline(ss, arrivalTime, '|');
+        getline(ss, status, '|');
+        getline(ss, totalSeatsStr, '|');
+        getline(ss, bookedSeatsStr, '|');
+
+        Flight* temp = new Flight[flightCount + 1];
+        for(int i = 0; i < flightCount; i++){
+            temp[i] = flight[i];
+        }
+        temp[flightCount].setFlightData(
+            flightID, departure, destination, departureTime,
+            arrivalTime, status, stoi(totalSeatsStr), stoi(bookedSeatsStr)
+        );
+
+        delete[] flight;
+        flight = temp;
+        flightCount++;
+    }
+
+    fin.close();
+}
+
+void AirlineBookingSystem::saveFlight(){
+    ofstream fout("flight.txt");
+    for(int i = 0; i < flightCount; i++){
+        fout << flight[i].getFlightID() << "|"
+             << flight[i].getDeparture() << "|"
+             << flight[i].getDestination() << "|"
+             << flight[i].getDepartureTime() << "|"
+             << flight[i].getArrivalTime() << "|"
+             << flight[i].getStatus() << "|"
+             << flight[i].getTotalSeats() << "|"
+             << flight[i].getBookedSeats()
+             << "\n";
+    }
+    fout.close();
 }

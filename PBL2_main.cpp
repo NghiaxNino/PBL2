@@ -2,15 +2,17 @@
 
 int main(){
     AirlineBookingSystem system1;
-    string role;
 
-    if(system1.employeeLogin(role)){
-        if(role == "Manager") system1.menu();
-        else if(role == "Staff") system1.staffMenu();
-    }
-    else{
-        cout << "Dang nhap that bai\n";
-    }
+    system1.readPassengers();
+    system1.readEmployees();
+    system1.readFlights();
+    
+    system1.Menu();
+
+    system1.savePassengers();
+    system1.saveEmployees();
+    system1.saveFlights();
+
     system("pause");
     return 0;
 }

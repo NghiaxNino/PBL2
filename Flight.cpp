@@ -40,9 +40,6 @@ void Flight::output(){
     cout << "So ghe: " << bookedSeats << "/" << totalSeats << endl;
 }
 
-string Flight::getFlightID() const{
-    return flightID;
-}
 
 void Flight::updateInfo(){
     cout << "Nhap diem di moi: ";
@@ -69,4 +66,49 @@ void Flight::increaseBookedSeats(){
 
 void Flight::decreaseBookedSeats(){
     if(bookedSeats > 0) bookedSeats--;
+}
+
+void Flight::setFlightData(string flightID, string departure, string destination, string departureTime,
+                           string arrivalTime, string status, int totalSeats, int bookedSeats)
+{
+    this->flightID = flightID;
+    this->departure = departure;
+    this->destination = destination;
+    this->departureTime = departureTime;
+    this->arrivalTime = arrivalTime;
+    this->status = status;
+    this->totalSeats = totalSeats;
+    this->bookedSeats = bookedSeats;
+}
+
+string Flight::getFlightID() const{
+    return flightID;
+}
+
+string Flight::getDeparture() const{
+    return departure;
+}
+
+string Flight::getDestination() const{
+    return destination;
+}
+
+string Flight::getDepartureTime() const{
+    return departureTime;
+}
+
+string Flight::getArrivalTime() const{
+    return arrivalTime;
+}
+
+string Flight::getStatus() const{
+    return status;
+}
+
+int Flight::getTotalSeats() const{
+    return totalSeats;
+}
+
+int Flight::getBookedSeats() const{
+    return bookedSeats;
 }

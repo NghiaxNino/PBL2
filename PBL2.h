@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -32,8 +34,17 @@ class Passenger : public Person{
         void input();
         void output();
         void updateInfo();
+        string getUsername() const;
+        string getPassword() const;
         bool login(string username, string password);
         string getPassengerID() const;
+        string getGender() const;
+        string getCitizenID() const;
+        string getPhoneNumber() const;
+        string getEmail() const;
+        void setPassengerData(string id, string fullname, string username, string password,
+                              string gender, string citizenID, string phoneNumber, string email);
+
 };
 
 class Employee : public Person{
@@ -46,9 +57,12 @@ class Employee : public Person{
         void input();
         void output();
         void updateInfo();
+        string getUsername() const;
+        string getPassword() const;
         bool login(string username, string password);
         string getRole() const;
         string getEmployeeID() const;
+        void setEmployeeData(string id, string fullname, string role, string username, string password);
 };
 
 class Flight{
@@ -66,12 +80,21 @@ class Flight{
         Flight();
         void input();
         void output();
-        string getFlightID() const;
         void updateInfo();
         void updateStatus(string status);
         bool isFull();
         void increaseBookedSeats();
         void decreaseBookedSeats();
+        string getFlightID() const;
+        string getDeparture() const;
+        string getDestination() const;
+        string getDepartureTime() const;
+        string getArrivalTime() const;
+        string getStatus() const;
+        int getTotalSeats() const;
+        int getBookedSeats() const;
+        void setFlightData(string flightID, string departure, string destination, string departureTime, 
+                           string arrivalTime, string status, int totalSeats, int bookedSeats);
 };
 class Ticket{
     private:
@@ -85,7 +108,7 @@ class Ticket{
 
     public:
         Ticket();
-        void input();
+        void input(string passengerID = "");        
         void output();
         string getTicketID() const;
         string getPassengerID() const;
@@ -111,12 +134,6 @@ class AirlineBookingSystem{
     public:
         AirlineBookingSystem();
         ~AirlineBookingSystem();
-
-        void menu();
-        void flightMenu();
-        void passengerMenu();
-        void employeeMenu();
-        void ticketMenu();
         
         void addFlight();
         void deleteFlight();
@@ -136,8 +153,8 @@ class AirlineBookingSystem{
         int searchEmployee(string employeeID);
         void displayEmployees();
 
-        void createTicket();
-        void cancelTicket();
+        void createTicket(string passengerID = "");
+        void cancelTicket(string passengerID = "");
         int searchTicket(string ticketID);
         void displayTickets();
 
@@ -149,8 +166,23 @@ class AirlineBookingSystem{
         void sortFlightByTime();
         void sortPassengerByName();
 
-        bool employeeLogin(string &role);
-        void staffMenu();
+        void Menu();
+        void flightMenu();
+        void e_passengerMenu();
+        void passengerMenu(int pos);
+        void employeeMenu();
+            void managerMenu();
+            void staffMenu();
+        void ticketMenu();
+        int passengerLogin();
+        int employeeLogin();
+
+        void readEmployee();
+        void saveEmployee();
+        void readPassenger();
+        void savePassenger();
+        void readFlight();
+        void saveFlight();
 
 };
 #endif

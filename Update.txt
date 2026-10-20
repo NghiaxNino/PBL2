@@ -1,0 +1,39 @@
+Thêm và sửa các hàm và thư viện:
+    #include <fstream>
+    #include <sstream>
+
+(
+    void setPassengerData(string id, string fullname, string username, string password,
+                          string gender, string citizenID, string phoneNumber, string email);
+
+    void setEmployeeData(string id, string fullname, string role, string username, string password);
+
+    void setFlightData(string flightID, string departure, string destination, string departureTime, 
+                       string arrivalTime, string status, int totalSeats, int bookedSeats);
+    Các hàm get tương ứng
+)
+
+
+
+    void createTicket(string passengerID = "");
+    void cancelTicket(string passengerID = "");
+
+    void Menu();
+    void flightMenu();
+    void e_passengerMenu(); // menu cho nhân viên
+    void passengerMenu(int pos);// menu cho khách hàng
+    void employeeMenu();
+        void managerMenu();
+        void staffMenu();
+    void ticketMenu();
+
+    int passengerLogin();
+    int employeeLogin();
+
+File:
+    void readEmployee();
+    void saveEmployee();
+    void readPassenger();
+    void savePassenger();
+    void readFlight();
+    void saveFlight();
